@@ -1,0 +1,25 @@
+{
+    "definitions": {},
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://example.com/object1642758071.json",
+    "title": "Root",
+    "type": "object",
+    "properties": {
+        "email": {
+            "$id": "#root/email",
+            "title": "Email",
+            "type": "string"
+        }
+    },
+    "code": {
+        "$id": "#root/code",
+        "title": "Code",
+        "type": "string"
+    },
+
+    "additionalProperties": false,
+    "required": [
+        "email",
+        "code"
+    ]
+}
