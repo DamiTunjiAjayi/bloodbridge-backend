@@ -124,6 +124,7 @@ resource "aws_lambda_function" "change_password_function" {
   }
   }
   layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
+
 }
 
 # =================================================================
