@@ -163,3 +163,10 @@ module "cognito_end_user" {
 }
 
 
+module "s3" {
+  source           = "./module/s3"
+  RESOURCES_PREFIX = local.RESOURCES_PREFIX
+  BUCKET_NAME      = "${local.RESOURCES_PREFIX}-email-templates"
+  tags             = local.common_tags
+
+}
