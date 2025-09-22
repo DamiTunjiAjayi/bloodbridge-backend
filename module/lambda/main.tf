@@ -64,9 +64,9 @@ resource "aws_lambda_function" "sign_up_function" {
       INFO_EMAIL            = "${var.INFO_EMAIL}"
       CURRENT_AWS_REGION    = "${var.AWS_REGION}"
       USER_TABLE_NAME         = "${var.USER_TABLE_NAME}"
-      CLIENT_SECRET         = "${var.CLIENT_SECRET}"
-      CLIENT_ID             = "${var.CLIENT_ID}"
-      POOL_ID               = "${var.POOL_ID}"
+    #   CLIENT_SECRET         = "${var.CLIENT_SECRET}"
+    #   CLIENT_ID             = "${var.CLIENT_ID}"
+    #   POOL_ID               = "${var.POOL_ID}"
     }
   }
   layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
@@ -91,9 +91,9 @@ resource "aws_lambda_function" "resend_code_function" {
       INFO_EMAIL            = "${var.INFO_EMAIL}"
       CURRENT_AWS_REGION    = "${var.AWS_REGION}"
       USER_TABLE_NAME         = "${var.USER_TABLE_NAME}"
-      CLIENT_SECRET         = "${var.CLIENT_SECRET}"
-      CLIENT_ID             = "${var.CLIENT_ID}"
-      POOL_ID               = "${var.POOL_ID}"
+      # CLIENT_SECRET         = "${var.CLIENT_SECRET}"
+      # CLIENT_ID             = "${var.CLIENT_ID}"
+      # POOL_ID               = "${var.POOL_ID}"
   }
   }
   layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
@@ -118,9 +118,9 @@ resource "aws_lambda_function" "change_password_function" {
       INFO_EMAIL            = "${var.INFO_EMAIL}"
       CURRENT_AWS_REGION    = "${var.AWS_REGION}"
       USER_TABLE_NAME         = "${var.USER_TABLE_NAME}"
-      CLIENT_SECRET         = "${var.CLIENT_SECRET}"
-      CLIENT_ID             = "${var.CLIENT_ID}"
-      POOL_ID               = "${var.POOL_ID}"
+      # CLIENT_SECRET         = "${var.CLIENT_SECRET}"
+      # CLIENT_ID             = "${var.CLIENT_ID}"
+      # POOL_ID               = "${var.POOL_ID}"
   }
   }
   layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
@@ -146,9 +146,9 @@ resource "aws_lambda_function" "verify_account_function" {
       INFO_EMAIL            = "${var.INFO_EMAIL}"
       CURRENT_AWS_REGION    = "${var.AWS_REGION}"
       USER_TABLE_NAME         = "${var.USER_TABLE_NAME}"
-      CLIENT_SECRET         = "${var.CLIENT_SECRET}"
-      CLIENT_ID             = "${var.CLIENT_ID}"
-      POOL_ID               = "${var.POOL_ID}"
+      # CLIENT_SECRET         = "${var.CLIENT_SECRET}"
+      # CLIENT_ID             = "${var.CLIENT_ID}"
+      # POOL_ID               = "${var.POOL_ID}"
   }
   }
   layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
@@ -173,9 +173,9 @@ resource "aws_lambda_function" "login_function" {
       INFO_EMAIL            = "${var.INFO_EMAIL}"
       CURRENT_AWS_REGION    = "${var.AWS_REGION}"
       USER_TABLE_NAME         = "${var.USER_TABLE_NAME}"
-      CLIENT_SECRET         = "${var.CLIENT_SECRET}"
-      CLIENT_ID             = "${var.CLIENT_ID}"
-      POOL_ID               = "${var.POOL_ID}"
+      # CLIENT_SECRET         = "${var.CLIENT_SECRET}"
+      # CLIENT_ID             = "${var.CLIENT_ID}"
+      # POOL_ID               = "${var.POOL_ID}"
   }
   }
   layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
@@ -200,9 +200,9 @@ resource "aws_lambda_function" "forgot_password_function" {
       INFO_EMAIL            = "${var.INFO_EMAIL}"
       CURRENT_AWS_REGION    = "${var.AWS_REGION}"
       USER_TABLE_NAME         = "${var.USER_TABLE_NAME}"
-      CLIENT_SECRET         = "${var.CLIENT_SECRET}"
-      CLIENT_ID             = "${var.CLIENT_ID}"
-      POOL_ID               = "${var.POOL_ID}"
+      # CLIENT_SECRET         = "${var.CLIENT_SECRET}"
+      # CLIENT_ID             = "${var.CLIENT_ID}"
+      # POOL_ID               = "${var.POOL_ID}"
   }
   }
   layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
@@ -228,9 +228,9 @@ resource "aws_lambda_function" "confirm_forgot_password_function" {
       INFO_EMAIL            = "${var.INFO_EMAIL}"
       CURRENT_AWS_REGION    = "${var.AWS_REGION}"
       USER_TABLE_NAME         = "${var.USER_TABLE_NAME}"
-      CLIENT_SECRET         = "${var.CLIENT_SECRET}"
-      CLIENT_ID             = "${var.CLIENT_ID}"
-      POOL_ID               = "${var.POOL_ID}"
+      # CLIENT_SECRET         = "${var.CLIENT_SECRET}"
+      # CLIENT_ID             = "${var.CLIENT_ID}"
+      # POOL_ID               = "${var.POOL_ID}"
   }
   }
   layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
@@ -255,9 +255,9 @@ resource "aws_lambda_function" "confirm_signup_function" {
       INFO_EMAIL            = "${var.INFO_EMAIL}"
       CURRENT_AWS_REGION    = "${var.AWS_REGION}"
       USER_TABLE_NAME         = "${var.USER_TABLE_NAME}"
-      CLIENT_SECRET         = "${var.CLIENT_SECRET}"
-      CLIENT_ID             = "${var.CLIENT_ID}"
-      POOL_ID               = "${var.POOL_ID}"
+      # CLIENT_SECRET         = "${var.CLIENT_SECRET}"
+      # CLIENT_ID             = "${var.CLIENT_ID}"
+      # POOL_ID               = "${var.POOL_ID}"
   }
   }
   layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]

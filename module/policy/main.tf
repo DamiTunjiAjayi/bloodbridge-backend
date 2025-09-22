@@ -138,40 +138,40 @@ resource "aws_iam_policy" "bloodbridge_lambda_policy" {
 
 resource "aws_iam_role_policy_attachment" "lambda_sign_up_function_attachment" {
   role       = var.SIGN_UP_FUNCTION_ROLE_NAME
-  policy_arn = aws_iam_policy.safespace_lambda_policy.arn
+  policy_arn = aws_iam_policy.bloodbridge_lambda_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_resend_code_function_attachment" {
   role       = var.RESEND_CODE_FUNCTION_ROLE_NAME
-  policy_arn = aws_iam_policy.safespace_lambda_policy.arn
+  policy_arn = aws_iam_policy.bloodbridge_lambda_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_change_password_function_attachment" {
   role       = var.CHANGE_PASSWORD_FUNCTION_ROLE_NAME
-  policy_arn = aws_iam_policy.safespace_lambda_policy.arn
+  policy_arn = aws_iam_policy.bloodbridge_lambda_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_verify_account_function_attachment" {
   role       = var.VERIFY_ACCOUNT_FUNCTION_ROLE_NAME
-  policy_arn = aws_iam_policy.safespace_lambda_policy.arn
+  policy_arn = aws_iam_policy.bloodbridge_lambda_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_login_function_attachment" {
   role       = var.LOGIN_FUNCTION_ROLE_NAME
-  policy_arn = aws_iam_policy.safespace_lambda_policy.arn
+  policy_arn = aws_iam_policy.bloodbridge_lambda_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_forgot_password_function_attachment" {
   role       = var.FORGOT_PASSWORD_FUNCTION_ROLE_NAME
-  policy_arn = aws_iam_policy.safespace_lambda_policy.arn
+  policy_arn = aws_iam_policy.bloodbridge_lambda_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_confirm_forgot_password_function_attachment" {
   role       = var.CONFIRM_FORGOT_PASSWORD_FUNCTION_ROLE_NAME
-  policy_arn = aws_iam_policy.safespace_lambda_policy.arn
+  policy_arn = aws_iam_policy.bloodbridge_lambda_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_confirm_signup_function_attachment" {
   role       = var.CONFIRM_SIGNUP_FUNCTION_ROLE_NAME
-  policy_arn = aws_iam_policy.safespace_lambda_policy.arn
+  policy_arn = aws_iam_policy.bloodbridge_lambda_policy.arn
 }
