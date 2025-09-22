@@ -14,6 +14,10 @@ CLIENT_SECRET = os.environ["CLIENT_SECRET"]
 client = boto3.client('cognito-idp')
 
 
+
+
+
+
 def get_secret_hash_individual(username):
     msg = username + CLIENT_ID
     dig = hmac.new(
