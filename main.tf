@@ -144,22 +144,22 @@ module "api" {
 #  cognito creation..
 ##==================================================
 
-# module "cognito_end_user" {
-#   source      = "./module/cognito"
-#   ENV         = var.ENV
-#   COMMON_TAGS = local.common_tags
-#   # EMAIL_SENDER                           = local.INFO_EMAIL
-#   IAM_COGNITO_ASSUMABLE_ROLE_EXTERNAL_ID = var.IAM_COGNITO_ASSUMABLE_ROLE_EXTERNAL_ID
-#   AWS_REGION                             = data.aws_region.current.name
-#   # CURRENT_ACCOUNT_ID                     = local.ACCOUNTID
-#   WEBAPP_DNS            = var.WEBAPP_DNS
-#   COGNITO_GROUP_LIST    = var.COGNITO_GROUP_LIST
-#   RESOURCE_PREFIX       = local.RESOURCES_PREFIX
-#   BUCKET_NAME           = module.s3.MESSAGING_BUCKET_NAME
-#   PYTHON_LAMBDA_VERSION = var.LAMBDA_PYTHON_VERSION
-#   # COGNITO_DOMAIN_NAME                    = local.cognito_domain_name
-#   RESEND_API_KEY  = var.RESEND_API_KEY
-#   USER_TABLE_NAME = module.user_table_dynamodb.table_name
-# }
+module "cognito_end_user" {
+  source      = "./module/cognito"
+  ENV         = var.ENV
+  COMMON_TAGS = local.common_tags
+  # EMAIL_SENDER                           = local.INFO_EMAIL
+  IAM_COGNITO_ASSUMABLE_ROLE_EXTERNAL_ID = var.IAM_COGNITO_ASSUMABLE_ROLE_EXTERNAL_ID
+  AWS_REGION                             = data.aws_region.current.name
+  # CURRENT_ACCOUNT_ID                     = local.ACCOUNTID
+  WEBAPP_DNS            = var.WEBAPP_DNS
+  COGNITO_GROUP_LIST    = var.COGNITO_GROUP_LIST
+  RESOURCE_PREFIX       = local.RESOURCES_PREFIX
+  BUCKET_NAME           = module.s3.MESSAGING_BUCKET_NAME
+  PYTHON_LAMBDA_VERSION = var.LAMBDA_PYTHON_VERSION
+  # COGNITO_DOMAIN_NAME                    = local.cognito_domain_name
+  RESEND_API_KEY  = var.RESEND_API_KEY
+  USER_TABLE_NAME = module.user_table_dynamodb.table_name
+}
 
 
