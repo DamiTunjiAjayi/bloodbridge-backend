@@ -88,40 +88,39 @@ module "user_table_dynamodb" {
 
 #api module
 
-# module "api" {
-#   source             = "./module/api"
-#   ENV                = var.ENV
-#   RESOURCES_PREFIX   = local.RESOURCES_PREFIX
-#   CURRENT_ACCOUNT_ID = data.aws_caller_identity.current.account_id
-#   depends_on         = [module.lambda]
-#   # API_DOMAIN_NAME                                   = local.DOMAIN_NAME
-#   LAMBDA_SIGN_UP_FUNCTION_ARN                 = module.lambda.LAMBDA_SIGN_UP_FUNCTION_ARN
-#   LAMBDA_RESEND_CODE_FUNCTION_ARN             = module.lambda.LAMBDA_RESEND_CODE_FUNCTION_ARN
-#   LAMBDA_LOGIN_FUNCTION_ARN                   = module.lambda.LAMBDA_LOGIN_FUNCTION_ARN
-#   LAMBDA_VERIFY_ACCOUNT_FUNCTION_ARN          = module.lambda.LAMBDA_VERIFY_ACCOUNT_FUNCTION_ARN
-#   LAMBDA_CHANGE_PASSWORD_FUNCTION_ARN         = module.lambda.LAMBDA_CHANGE_PASSWORD_FUNCTION_ARN
-#   LAMBDA_FORGOT_PASSWORD_FUNCTION_ARN         = module.lambda.LAMBDA_FORGOT_PASSWORD_FUNCTION_ARN
-#   LAMBDA_CONFIRM_FORGOT_PASSWORD_FUNCTION_ARN = module.lambda.LAMBDA_CONFIRM_FORGOT_PASSWORD_FUNCTION_ARN
-#   LAMBDA_CONFIRM_SIGNUP_FUNCTION_ARN          = module.lambda.LAMBDA_CONFIRM_SIGNUP_FUNCTION_ARN
-#   LAMBDA_PROFILE_SETTINGS_FUNCTION_ARN        = module.lambda.LAMBDA_PROFILE_SETTINGS_FUNCTION_ARN
+module "api" {
+  source             = "./module/api"
+  ENV                = var.ENV
+  RESOURCES_PREFIX   = local.RESOURCES_PREFIX
+  CURRENT_ACCOUNT_ID = data.aws_caller_identity.current.account_id
+  depends_on         = [module.lambda]
+  # API_DOMAIN_NAME                                   = local.DOMAIN_NAME
+  LAMBDA_SIGN_UP_FUNCTION_ARN                 = module.lambda.LAMBDA_SIGN_UP_FUNCTION_ARN
+  LAMBDA_RESEND_CODE_FUNCTION_ARN             = module.lambda.LAMBDA_RESEND_CODE_FUNCTION_ARN
+  LAMBDA_LOGIN_FUNCTION_ARN                   = module.lambda.LAMBDA_LOGIN_FUNCTION_ARN
+  LAMBDA_VERIFY_ACCOUNT_FUNCTION_ARN          = module.lambda.LAMBDA_VERIFY_ACCOUNT_FUNCTION_ARN
+  LAMBDA_CHANGE_PASSWORD_FUNCTION_ARN         = module.lambda.LAMBDA_CHANGE_PASSWORD_FUNCTION_ARN
+  LAMBDA_FORGOT_PASSWORD_FUNCTION_ARN         = module.lambda.LAMBDA_FORGOT_PASSWORD_FUNCTION_ARN
+  LAMBDA_CONFIRM_FORGOT_PASSWORD_FUNCTION_ARN = module.lambda.LAMBDA_CONFIRM_FORGOT_PASSWORD_FUNCTION_ARN
+  LAMBDA_CONFIRM_SIGNUP_FUNCTION_ARN          = module.lambda.LAMBDA_CONFIRM_SIGNUP_FUNCTION_ARN
  
 
-#   LAMBDA_NAMES = [
-#     module.lambda.LAMBDA_SIGN_UP_FUNCTION_NAME,
-#     module.lambda.LAMBDA_RESEND_CODE_FUNCTION_NAME,
-#     module.lambda.LAMBDA_LOGIN_FUNCTION_NAME,
-#     module.lambda.LAMBDA_CHANGE_PASSWORD_FUNCTION_NAME,
-#     module.lambda.LAMBDA_VERIFY_ACCOUNT_FUNCTION_NAME,
-#     module.lambda.LAMBDA_FORGOT_PASSWORD_FUNCTION_NAME,
-#     module.lambda.LAMBDA_CONFIRM_FORGOT_PASSWORD_FUNCTION_NAME,
-#     module.lambda.LAMBDA_CONFIRM_SIGNUP_FUNCTION_NAME,
-#     module.lambda.LAMBDA_PROFILE_SETTINGS_FUNCTION_NAME,
+  LAMBDA_NAMES = [
+    module.lambda.LAMBDA_SIGN_UP_FUNCTION_NAME,
+    module.lambda.LAMBDA_RESEND_CODE_FUNCTION_NAME,
+    module.lambda.LAMBDA_LOGIN_FUNCTION_NAME,
+    module.lambda.LAMBDA_CHANGE_PASSWORD_FUNCTION_NAME,
+    module.lambda.LAMBDA_VERIFY_ACCOUNT_FUNCTION_NAME,
+    module.lambda.LAMBDA_FORGOT_PASSWORD_FUNCTION_NAME,
+    module.lambda.LAMBDA_CONFIRM_FORGOT_PASSWORD_FUNCTION_NAME,
+    module.lambda.LAMBDA_CONFIRM_SIGNUP_FUNCTION_NAME,
+    module.lambda.LAMBDA_PROFILE_SETTINGS_FUNCTION_NAME,
     
 
 
-#   ]
+  ]
 
-# }
+}
 
 
 # ##==================================================
