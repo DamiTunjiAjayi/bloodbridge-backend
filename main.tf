@@ -3,7 +3,7 @@ resource "random_id" "s3_suffix" {
 }
 
 locals {
-  RESOURCES_PREFIX = "${lower(var.ENV)}-safespace"
+  RESOURCES_PREFIX = "${lower(var.ENV)}-bloodbridge"
   ACCOUNTID        = data.aws_caller_identity.current.account_id
   INFO_EMAIL       = "bloodbridgenaija@gmail.com"
 
