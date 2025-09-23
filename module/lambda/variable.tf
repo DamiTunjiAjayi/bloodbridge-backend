@@ -1,7 +1,7 @@
 variable "ENV" {}
 variable "AWS_REGION" {}
 variable "LAMBDA_PYTHON_VERSION" {}
-# variable "LAMBDA_JAVASCRIPT_VERSION" {}
+variable "LAMBDA_JAVASCRIPT_VERSION" {}
 variable "RESOURCES_PREFIX" {}
 variable "tags" {}
 variable "INFO_EMAIL" {}
@@ -21,17 +21,9 @@ variable "CONFIRM_SIGNUP_FUNCTION_ROLE_ARN" {}
   
 
 
-
-
-
-
-
-# variable "CLIENT_SECRET" {
-#   # default = "lkihnjq316h801l9k4g2n4ddssruhhp2g02i5862rn7na27konj"
-# }
-# variable "CLIENT_ID" {
-#   # default = "3fruiekpk1uro5t8kvqi8t3gog"
-# }
-# variable "POOL_ID" {
-#   # default = "us-east-1_11cmR78v5"
-# }
+variable "CLIENT_SECRET" {
+}
+variable "CLIENT_ID" {
+}
+variable "POOL_ID" {
+}

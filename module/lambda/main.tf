@@ -13,13 +13,13 @@ resource "aws_lambda_layer_version" "lambda_utils_layer" {
   compatible_architectures = ["x86_64", "arm64"]
 }
 
-# resource "aws_lambda_layer_version" "javascript_layer" {
-#   filename                 = "${path.module}/layers/javascript_layer.zip"
-#   layer_name               = "${var.RESOURCES_PREFIX}-javascript-layer"
-#   compatible_runtimes      = [var.LAMBDA_JAVASCRIPT_VERSION]
-#   compatible_architectures = ["x86_64", "arm64"]
-#   description              = "javascript layer for node lambdas"
-# }
+resource "aws_lambda_layer_version" "javascript_layer" {
+  filename                 = "${path.module}/layers/javascript_layer.zip"
+  layer_name               = "${var.RESOURCES_PREFIX}-javascript-layer"
+  compatible_runtimes      = [var.LAMBDA_JAVASCRIPT_VERSION]
+  compatible_architectures = ["x86_64", "arm64"]
+  description              = "javascript layer for node lambdas"
+}
 
 resource "aws_lambda_layer_version" "python_layer" {
   filename                 = "${path.module}/layers/python_layer.zip"
@@ -54,7 +54,7 @@ resource "aws_lambda_function" "sign_up_function" {
   role             = var.SIGN_UP_FUNCTION_ROLE_ARN
   handler          = "sign_up.lambda_handler"
   source_code_hash = data.archive_file.lambda_sign_up_archive.output_base64sha256
-  runtime          = var.LAMBDA_PYTHON_VERSION
+  runtime          = var.LAMBDA_JAVASCRIPT_VERSION
   timeout          = 180
   memory_size      = 1024
   tags = var.tags
@@ -69,7 +69,7 @@ resource "aws_lambda_function" "sign_up_function" {
     #   POOL_ID               = "${var.POOL_ID}"
     }
   }
-  layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
+  layers = ["${aws_lambda_layer_version.javascript_layer.arn}"]
 }
 
 # =================================================================
@@ -81,7 +81,7 @@ resource "aws_lambda_function" "resend_code_function" {
   role             = var.RESEND_CODE_FUNCTION_ROLE_ARN
   handler          = "resend_code.lambda_handler"
   source_code_hash = data.archive_file.lambda_resend_code_archive.output_base64sha256
-  runtime          = var.LAMBDA_PYTHON_VERSION
+  runtime          = var.LAMBDA_JAVASCRIPT_VERSION
   timeout          = 180
   memory_size      = 1024
   tags = var.tags
@@ -96,7 +96,7 @@ resource "aws_lambda_function" "resend_code_function" {
       # POOL_ID               = "${var.POOL_ID}"
   }
   }
-  layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
+  layers = ["${aws_lambda_layer_version.javascript_layer.arn}"]
 }
 
 # =================================================================
@@ -108,7 +108,7 @@ resource "aws_lambda_function" "change_password_function" {
   role             = var.CHANGE_PASSWORD_FUNCTION_ROLE_ARN
   handler          = "change_password.lambda_handler"
   source_code_hash = data.archive_file.lambda_change_password_archive.output_base64sha256
-  runtime          = var.LAMBDA_PYTHON_VERSION
+  runtime          = var.LAMBDA_JAVASCRIPT_VERSION
   timeout          = 180
   memory_size      = 1024
   tags = var.tags
@@ -123,7 +123,7 @@ resource "aws_lambda_function" "change_password_function" {
       # POOL_ID               = "${var.POOL_ID}"
   }
   }
-  layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
+  layers = ["${aws_lambda_layer_version.javascript_layer.arn}"]
 
 }
 
@@ -136,7 +136,7 @@ resource "aws_lambda_function" "verify_account_function" {
   role             = var.VERIFY_ACCOUNT_FUNCTION_ROLE_ARN
   handler          = "verify_account.lambda_handler"
   source_code_hash = data.archive_file.lambda_verify_account_archive.output_base64sha256
-  runtime          = var.LAMBDA_PYTHON_VERSION
+  runtime          = var.LAMBDA_JAVASCRIPT_VERSION
   timeout          = 180
   memory_size      = 1024
   tags = var.tags
@@ -151,7 +151,7 @@ resource "aws_lambda_function" "verify_account_function" {
       # POOL_ID               = "${var.POOL_ID}"
   }
   }
-  layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
+  layers = ["${aws_lambda_layer_version.javascript_layer.arn}"]
 }
 
 # =================================================================
@@ -163,7 +163,7 @@ resource "aws_lambda_function" "login_function" {
   role             = var.LOGIN_FUNCTION_ROLE_ARN
   handler          = "login.lambda_handler"
   source_code_hash = data.archive_file.lambda_login_archive.output_base64sha256
-  runtime          = var.LAMBDA_PYTHON_VERSION
+  runtime          = var.LAMBDA_JAVASCRIPT_VERSION
   timeout          = 180
   memory_size      = 1024
   tags = var.tags
@@ -178,7 +178,7 @@ resource "aws_lambda_function" "login_function" {
       # POOL_ID               = "${var.POOL_ID}"
   }
   }
-  layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
+  layers = ["${aws_lambda_layer_version.javascript_layer.arn}"]
 }
 
 # =================================================================
@@ -190,7 +190,7 @@ resource "aws_lambda_function" "forgot_password_function" {
   role             = var.FORGOT_PASSWORD_FUNCTION_ROLE_ARN
   handler          = "forgot_password.lambda_handler"
   source_code_hash = data.archive_file.lambda_forgot_password_archive.output_base64sha256
-  runtime          = var.LAMBDA_PYTHON_VERSION
+  runtime          = var.LAMBDA_JAVASCRIPT_VERSION
   timeout          = 180
   memory_size      = 1024
   tags = var.tags
@@ -205,7 +205,7 @@ resource "aws_lambda_function" "forgot_password_function" {
       # POOL_ID               = "${var.POOL_ID}"
   }
   }
-  layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
+  layers = ["${aws_lambda_layer_version.javascript_layer.arn}"]
 }
 
 
@@ -218,7 +218,7 @@ resource "aws_lambda_function" "confirm_forgot_password_function" {
   role             = var.CONFIRM_FORGOT_PASSWORD_FUNCTION_ROLE_ARN
   handler          = "login.lambda_handler"
   source_code_hash = data.archive_file.lambda_confirm_forgot_password_archive.output_base64sha256
-  runtime          = var.LAMBDA_PYTHON_VERSION
+  runtime          = var.LAMBDA_JAVASCRIPT_VERSION
   timeout          = 180
   memory_size      = 1024
   tags = var.tags
@@ -233,7 +233,7 @@ resource "aws_lambda_function" "confirm_forgot_password_function" {
       # POOL_ID               = "${var.POOL_ID}"
   }
   }
-  layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
+  layers = ["${aws_lambda_layer_version.javascript_layer.arn}"]
 }
 
 # =================================================================
@@ -245,7 +245,7 @@ resource "aws_lambda_function" "confirm_signup_function" {
   role             = var.CONFIRM_SIGNUP_FUNCTION_ROLE_ARN
   handler          = "confirm_signup.lambda_handler"
   source_code_hash = data.archive_file.lambda_confirm_signup_archive.output_base64sha256
-  runtime          = var.LAMBDA_PYTHON_VERSION
+  runtime          = var.LAMBDA_JAVASCRIPT_VERSION
   timeout          = 180
   memory_size      = 1024
   tags = var.tags
@@ -260,5 +260,5 @@ resource "aws_lambda_function" "confirm_signup_function" {
       # POOL_ID               = "${var.POOL_ID}"
   }
   }
-  layers = ["${aws_lambda_layer_version.lambda_utils_layer.arn}", "${aws_lambda_layer_version.python_layer.arn}", "${aws_lambda_layer_version.default_layer.arn}"]
+  layers = ["${aws_lambda_layer_version.javascript_layer.arn}"]
 }
