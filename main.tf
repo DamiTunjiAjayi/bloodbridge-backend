@@ -51,12 +51,12 @@ module "lambda" {
   tags             = local.common_tags
   RESOURCES_PREFIX = local.RESOURCES_PREFIX
   INFO_EMAIL       = local.INFO_EMAIL
-  # LAMBDA_JAVASCRIPT_VERSION               = var.LAMBDA_JAVASCRIPT_VERSION
+  LAMBDA_JAVASCRIPT_VERSION               = var.LAMBDA_JAVASCRIPT_VERSION
   LAMBDA_PYTHON_VERSION   = var.LAMBDA_PYTHON_VERSION
   USER_TABLE_NAME         = module.user_table_dynamodb.table_name
-  # CLIENT_SECRET = module.cognito_end_user.COGNITO_USER_CLIENT_SECRET
-  # CLIENT_ID     = module.cognito_end_user.COGNITO_USER_CLIENT_ID
-  # POOL_ID       = module.cognito_end_user.COGNITO_USER_POOL_ID
+  CLIENT_SECRET = module.cognito_end_user.COGNITO_USER_CLIENT_SECRET
+  CLIENT_ID     = module.cognito_end_user.COGNITO_USER_CLIENT_ID
+  POOL_ID       = module.cognito_end_user.COGNITO_USER_POOL_ID
 
   SIGN_UP_FUNCTION_ROLE_ARN                 = module.role.SIGN_UP_FUNCTION_ROLE_ARN
   RESEND_CODE_FUNCTION_ROLE_ARN             = module.role.RESEND_CODE_FUNCTION_ROLE_ARN
