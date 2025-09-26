@@ -11,3 +11,4 @@ variable "BUCKET_NAME" {}
 variable "RESEND_API_KEY" {}
 # variable "EMAIL_SENDER" {}
 # variable "CURRENT_ACCOUNT_ID" {}
+variable "MONGODB_URI" {}

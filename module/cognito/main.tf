@@ -439,6 +439,7 @@ resource "aws_lambda_function" "define_custom_auth" {
     variables = {
       ENV             = "${var.ENV}"
       USER_TABLE_NAME = "${var.USER_TABLE_NAME}"
+      MONGODB_URI                            = var.MONGODB_URI
     }
   }
 }
@@ -514,6 +515,7 @@ resource "aws_lambda_function" "create_custom_auth" {
     variables = {
       ENV             = "${var.ENV}"
       USER_TABLE_NAME = "${var.USER_TABLE_NAME}"
+      MONGODB_URI                            = var.MONGODB_URI
     }
   }
 }
@@ -588,6 +590,7 @@ resource "aws_lambda_function" "verify_custom_auth" {
     variables = {
       ENV             = "${var.ENV}"
       USER_TABLE_NAME = "${var.USER_TABLE_NAME}"
+      MONGODB_URI                            = var.MONGODB_URI
 
     }
   }

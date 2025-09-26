@@ -34,3 +34,7 @@ variable "COGNITO_GROUP_LIST" {
 variable "RESEND_API_KEY" {
   default = "re_8UngmHQ4_HYEWNtF6cGnWwFzknuXQN3Cd"
 }
+
+variable "MONGODB_URI" {
+  default = "mongodb+srv://alameensnr:W7riviZPDfSdl8ZJ@cluster0.zlc6hfo.mongodb.net/"
+}
