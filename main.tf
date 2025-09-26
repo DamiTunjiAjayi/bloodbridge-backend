@@ -48,6 +48,7 @@ module "lambda" {
   source           = "./module/lambda"
   ENV              = var.ENV
   AWS_REGION       = var.region
+  MONGODB_URI                            = var.MONGODB_URI
   tags             = local.common_tags
   RESOURCES_PREFIX = local.RESOURCES_PREFIX
   INFO_EMAIL       = local.INFO_EMAIL
@@ -160,6 +161,7 @@ module "cognito_end_user" {
   # COGNITO_DOMAIN_NAME                    = local.cognito_domain_name
   RESEND_API_KEY  = var.RESEND_API_KEY
   USER_TABLE_NAME = module.user_table_dynamodb.table_name
+  MONGODB_URI                            = var.MONGODB_URI
 }
 
 
