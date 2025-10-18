@@ -1,121 +1,102 @@
-// file: lambdaUserSignup.js
-import crypto from "crypto";
-import {
-  CognitoIdentityProviderClient,
-  SignUpCommand,
-} from "@aws-sdk/client-cognito-identity-provider";
-import { connectDB } from "./src/config/db.js";
-import User from "./src/models/User.js";
+// File: models/User.js
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
-const REGION = process.env.AWS_REGION;
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const userSchema = new mongoose.Schema({
+  // Basic Info
+  name: { type: String, required: true },
+  dateOfBirth: { type: Date, required: true },
+  phoneNumber: { type: String, unique: true, required: true },
+  email: { type: String, unique: true, lowercase: true, required: true },
+  gender: { 
+    type: String, 
+    enum: ['Male', 'Female', 'Other'], 
+    required: true 
+  },
 
-const cognitoClient = new CognitoIdentityProviderClient({ region: REGION });
+  // Auth Info
+  password: { type: String, required: true },
+  confirmPassword: { type: String, required: true }, // can be validated before save
 
-function getSecretHash(username, clientId, clientSecret) {
-  const msg = username + clientId;
-  const hmac = crypto.createHmac("sha256", clientSecret);
-  hmac.update(msg);
-  return hmac.digest("base64");
-}
+  // Medical Info
+  bloodGroup: {
+    type: String,
+    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    required: true
+  },
+  genotype: {
+    type: String,
+    enum: ['AA', 'AS', 'SS', 'AC', 'SC'],
+    required: true
+  },
+  medicalCondition: {
+    type: String,
+    enum: ['None', 'Diabetes', 'Hypertension', 'Other'],
+    default: 'None',
+    required: true
+  },
+  lastDonationDate: {
+    type: String,
+    enum: [
+      'First Time Donor',
+      '3 months ago',
+      '6 months ago',
+      '1 year ago',
+      'More than 1 year'
+    ],
+    required: true
+  },
 
-export const handler = async (event) => {
-  const resp = { error: false, success: false, message: "", data: null };
-  let statusCode = 200;
+  // Location Info
+  currentLocation: { type: String, required: true },
+  preferredDonationRadius: {
+    type: String,
+    enum: ['5km', '10km', '25km', '50km'],
+    required: true
+  },
+  preferredDonationCenters: {
+    type: [String],
+    required: true
+  },
 
-  try {
-    await connectDB();
-
-    const body =
-      event.body && typeof event.body === "string"
-        ? JSON.parse(event.body)
-        : event.body || event;
-
-    const {
-      name,
-      dateOfBirth,
-      phoneNumber,
-      email,
-      gender,
-      password,
-      bloodGroup,
-      genotype,
-      medicalCondition,
-      lastDonationDate,
-      currentLocation,
-      preferredRadius,
-      preferredCenters,
-    } = body;
-
-    const attributes = [
-      { Name: "email", Value: email },
-      { Name: "name", Value: name },
-      { Name: "birthdate", Value: dateOfBirth },
-      { Name: "phone_number", Value: phoneNumber },
-      { Name: "gender", Value: gender },
-      { Name: "custom:bloodGroup", Value: bloodGroup },
-      { Name: "custom:genotype", Value: genotype },
-      { Name: "custom:medicalCondition", Value: medicalCondition },
-      { Name: "custom:currentLocation", Value: currentLocation },
-    ];
-    if (lastDonationDate) attributes.push({ Name: "custom:lastDonationDate", Value: lastDonationDate });
-    if (preferredRadius) attributes.push({ Name: "custom:preferredRadius", Value: preferredRadius });
-    if (preferredCenters && preferredCenters.length > 0) {
-      attributes.push({ Name: "custom:preferredCenters", Value: preferredCenters.join(",") });
+  // Consent Checkboxes
+  agreeToDonate: {
+    type: Boolean,
+    required: true,
+    validate: {
+      validator: v => v === true,
+      message: 'You must agree to donate voluntarily.'
     }
+  },
+  allowContact: {
+    type: Boolean,
+    default: false
+  },
 
-    const secretHash = getSecretHash(email, CLIENT_ID, CLIENT_SECRET);
+  // System fields
+  phoneVerified: { type: Boolean, default: false },
+  phoneVerificationCode: String,
+  phoneVerificationExpires: Date,
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
+  email2FAEnabled: { type: Boolean, default: false },
+  email2FACode: String,
+  email2FAExpires: Date,
+  lastLogin: Date,
+  createdAt: { type: Date, default: Date.now }
+});
 
-    const signUpResponse = await cognitoClient.send(
-      new SignUpCommand({
-        ClientId: CLIENT_ID,
-        SecretHash: secretHash,
-        Username: email,
-        Password: password,
-        UserAttributes: attributes,
-      })
-    );
+// Hash password before saving
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
 
-    const userSub = signUpResponse.UserSub;
-
-    await User.create({
-      sub: userSub,
-      email,
-      name,
-      dateOfBirth,
-      phoneNumber,
-      gender,
-      bloodGroup,
-      genotype,
-      medicalCondition,
-      lastDonationDate,
-      currentLocation,
-      preferredRadius,
-      preferredCenters,
-    });
-
-    resp.success = true;
-    resp.message = "Successfully signed up";
-    resp.data = { userSub };
-  } catch (err) {
-    console.error("User signup error:", err);
-    statusCode = 400;
-    resp.error = true;
-
-    if (err.name === "UsernameExistsException") {
-      resp.message = "User with this email already exists.";
-    } else if (err.name === "InvalidPasswordException") {
-      resp.message =
-        "Kindly use a stronger password. It must include a symbol, number and an uppercase character.";
-    } else {
-      statusCode = 500;
-      resp.message = "Something went wrong.";
-    }
-  }
-
-  return {
-    statusCode,
-    body: JSON.stringify(resp),
-  };
+// Compare entered password with hashed password
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
 };
+
+module.exports = mongoose.model('User', userSchema);
