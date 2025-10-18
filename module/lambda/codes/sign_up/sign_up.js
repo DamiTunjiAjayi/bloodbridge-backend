@@ -1,102 +1,148 @@
-// File: models/User.js
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+// File: lambda/signup.js
+const {
+  CognitoIdentityProviderClient,
+  SignUpCommand,
+} = require('@aws-sdk/client-cognito-identity-provider');
 
-const userSchema = new mongoose.Schema({
-  // Basic Info
-  name: { type: String, required: true },
-  dateOfBirth: { type: Date, required: true },
-  phoneNumber: { type: String, unique: true, required: true },
-  email: { type: String, unique: true, lowercase: true, required: true },
-  gender: { 
-    type: String, 
-    enum: ['Male', 'Female', 'Other'], 
-    required: true 
-  },
+const client = new CognitoIdentityProviderClient({ region: process.env.AWS_REGION });
+const CLIENT_ID = process.env.CLIENT_ID;
 
-  // Auth Info
-  password: { type: String, required: true },
-  confirmPassword: { type: String, required: true }, // can be validated before save
+exports.lambda_handler = async (event) => {
+  console.log('Incoming event:', event);
 
-  // Medical Info
-  bloodGroup: {
-    type: String,
-    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-    required: true
-  },
-  genotype: {
-    type: String,
-    enum: ['AA', 'AS', 'SS', 'AC', 'SC'],
-    required: true
-  },
-  medicalCondition: {
-    type: String,
-    enum: ['None', 'Diabetes', 'Hypertension', 'Other'],
-    default: 'None',
-    required: true
-  },
-  lastDonationDate: {
-    type: String,
-    enum: [
-      'First Time Donor',
-      '3 months ago',
-      '6 months ago',
-      '1 year ago',
-      'More than 1 year'
-    ],
-    required: true
-  },
+  try {
+    const {
+      name,
+      dateOfBirth,
+      phoneNumber,
+      email,
+      gender,
+      password,
+      confirmPassword,
+      bloodGroup,
+      genotype,
+      medicalCondition,
+      lastDonationDate,
+      currentLocation,
+      preferredDonationRadius,
+      preferredDonationCenters,
+      agreeToDonate,
+      allowContact
+    } = event;
 
-  // Location Info
-  currentLocation: { type: String, required: true },
-  preferredDonationRadius: {
-    type: String,
-    enum: ['5km', '10km', '25km', '50km'],
-    required: true
-  },
-  preferredDonationCenters: {
-    type: [String],
-    required: true
-  },
+    // Basic validation
+    const requiredFields = [
+      'name',
+      'dateOfBirth',
+      'phoneNumber',
+      'email',
+      'gender',
+      'password',
+      'confirmPassword',
+      'bloodGroup',
+      'genotype',
+      'medicalCondition',
+      'lastDonationDate',
+      'currentLocation',
+      'preferredDonationRadius',
+      'preferredDonationCenters',
+      'agreeToDonate'
+    ];
 
-  // Consent Checkboxes
-  agreeToDonate: {
-    type: Boolean,
-    required: true,
-    validate: {
-      validator: v => v === true,
-      message: 'You must agree to donate voluntarily.'
+    for (const field of requiredFields) {
+      if (!event[field]) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ error: `${field} is required.` })
+        };
+      }
     }
-  },
-  allowContact: {
-    type: Boolean,
-    default: false
-  },
 
-  // System fields
-  phoneVerified: { type: Boolean, default: false },
-  phoneVerificationCode: String,
-  phoneVerificationExpires: Date,
-  resetPasswordToken: String,
-  resetPasswordExpires: Date,
-  email2FAEnabled: { type: Boolean, default: false },
-  email2FACode: String,
-  email2FAExpires: Date,
-  lastLogin: Date,
-  createdAt: { type: Date, default: Date.now }
-});
+    if (password !== confirmPassword) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Passwords do not match.' })
+      };
+    }
 
-// Hash password before saving
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+    const signupResponse = await signup({
+      name,
+      dateOfBirth,
+      phoneNumber,
+      email,
+      gender,
+      password,
+      bloodGroup,
+      genotype,
+      medicalCondition,
+      lastDonationDate,
+      currentLocation,
+      preferredDonationRadius,
+      preferredDonationCenters,
+      agreeToDonate,
+      allowContact
+    });
 
-// Compare entered password with hashed password
-userSchema.methods.comparePassword = async function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'Signup successful',
+        response: signupResponse
+      })
+    };
+  } catch (err) {
+    console.error('Signup error:', err);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: err.message })
+    };
+  }
 };
 
-module.exports = mongoose.model('User', userSchema);
+const signup = async (userData) => {
+  const {
+    name,
+    dateOfBirth,
+    phoneNumber,
+    email,
+    gender,
+    password,
+    bloodGroup,
+    genotype,
+    medicalCondition,
+    lastDonationDate,
+    currentLocation,
+    preferredDonationRadius,
+    preferredDonationCenters,
+    agreeToDonate,
+    allowContact
+  } = userData;
+
+  const input = {
+    ClientId: CLIENT_ID,
+    Username: email,
+    Password: password,
+    UserAttributes: [
+      { Name: 'email', Value: email },
+      { Name: 'phone_number', Value: phoneNumber },
+      { Name: 'name', Value: name },
+      { Name: 'gender', Value: gender },
+      { Name: 'birthdate', Value: dateOfBirth },
+
+      // Custom attributes — must exist in your Cognito User Pool
+      { Name: 'custom:blood_group', Value: bloodGroup },
+      { Name: 'custom:genotype', Value: genotype },
+      { Name: 'custom:medical_condition', Value: medicalCondition },
+      { Name: 'custom:last_donation_date', Value: lastDonationDate },
+      { Name: 'custom:current_location', Value: currentLocation },
+      { Name: 'custom:preferred_donation_radius', Value: preferredDonationRadius },
+      { Name: 'custom:preferred_donation_centers', Value: Array.isArray(preferredDonationCenters) ? preferredDonationCenters.join(', ') : preferredDonationCenters },
+      { Name: 'custom:agree_to_donate', Value: String(agreeToDonate) },
+      { Name: 'custom:allow_contact', Value: String(allowContact) },
+    ],
+  };
+
+  const command = new SignUpCommand(input);
+  const resp = await client.send(command);
+  return resp;
+};
